@@ -1,3 +1,5 @@
+mod credentials_file;
+
 use clap::{Parser};
 
 #[derive(Parser, Debug)]
@@ -14,5 +16,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
     println!("{}", args.profile);
-    println!("{}", args.mfa_device.is_some())
+    println!("{}", args.mfa_device.is_some());
+    let file = credentials_file::read_aws_credentials_ini();
+    println!("{}", file.len())
 }
