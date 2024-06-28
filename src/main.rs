@@ -21,10 +21,11 @@ fn main() {
     let args = Args::parse();
     let mut profile = profile::Profile::new(args.profile.as_str());
     match profile.read_credentials_file() {
-        Ok(_) => println!("Success"),
+        Ok(_) => (),
         Err(e) => {
             eprintln!("{}", e);
             panic!("Failed to read credentials file")
         }
     }
+    profile.access_ssm();
 }
