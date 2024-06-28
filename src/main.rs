@@ -3,8 +3,8 @@ use std::fmt::Debug;
 use clap::Parser;
 use strum::IntoEnumIterator;
 
-mod credentials_file;
 mod fields;
+mod profile;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -19,13 +19,12 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let profile = args.profile;
-    let profile_long_term = format!("{}-long-term", profile.clone());
-    let file = credentials_file::read_aws_credentials_ini();
-    let section = file.section(Some(profile_long_term)).expect("this profile is not found");
-    let aws_key_long_term = section.get(fields::LongTermFields::AwsAccessKeyId.to_string()).expect("aws_access_key_id is not found");
-    let aws_secret_long_term = section.get(fields::LongTermFields::AwsSecretAccessKey.to_string()).expect("aws_secret_access_key is not found");
-
-    println!("{}", aws_key_long_term);
-    println!("{}", aws_secret_long_term);
+    let mut profile = profile::Profile::new(args.profile.as_str());
+    match profile.read_credentials_file() {
+        Ok(_) => println!("Success"),
+        Err(e) => {
+            eprintln!("{}", e);
+            panic!("Failed to read credentials file")
+        }
+    }
 }
