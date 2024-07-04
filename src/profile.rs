@@ -40,7 +40,7 @@ impl<'a> Profile<'a> {
         Ok(())
     }
 
-    pub fn access_ssm(&self) {
-        println!("accessing ssm with aws_key: {}, aws_secret: {}", self.aws_key, self.aws_secret);
+    pub async fn access_ssm(&self) {
+        let config = aws_config::load_from_env().await;
     }
 }

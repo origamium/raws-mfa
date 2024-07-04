@@ -9,15 +9,16 @@ mod profile;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    // optional
+    // optional. mfa device arn
     #[arg(short = 'm', long)]
-    mfa_device: Option<String>,
+    device: Option<String>,
 
     #[arg(short = 'p', long, default_value = "default")]
     profile: String,
 }
 
-fn main() {
+#[::tokio::main]
+async fn main() {
     let args = Args::parse();
     let mut profile = profile::Profile::new(args.profile.as_str());
     match profile.read_credentials_file() {
